@@ -1,3 +1,49 @@
+// Mobile nav toggle
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+}
+
+// Footer year
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+// Updates / News feed
+async function loadNews() {
+    const grid = document.getElementById('newsGrid');
+    if (!grid) return;
+    try {
+        const res = await fetch('/api/news');
+        const items = await res.json();
+        if (!Array.isArray(items) || items.length === 0) throw new Error('empty');
+
+        grid.innerHTML = items.map(item => {
+            const tag = item.url ? 'a' : 'div';
+            const linkAttrs = item.url ? `href="${item.url}" target="_blank" rel="noopener noreferrer"` : '';
+            const thumb = item.thumbnail ? `<img src="${item.thumbnail}" alt="" class="news-thumb" loading="lazy"/>` : '';
+            return `
+                <${tag} class="news-card" ${linkAttrs}>
+                    ${thumb}
+                    <span class="news-tag">${item.tag || 'Update'}</span>
+                    <h3>${item.title}</h3>
+                    <p>${item.summary}</p>
+                    <div class="news-meta">${item.source || 'Recol Builder Assist'}${item.date ? ' · ' + item.date : ''}</div>
+                </${tag}>
+            `;
+        }).join('');
+    } catch (err) {
+        grid.innerHTML = '<div class="news-card news-skeleton">Updates are unavailable right now. Check back soon.</div>';
+    }
+}
+loadNews();
+
 // Tab Switching Logic
 const tabBtns = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');

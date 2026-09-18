@@ -3,103 +3,191 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Application Studio | CV & Submission Letter</title>
+    <title>Recol Builder Assist — Explain. Recover. Apply.</title>
+    <meta name="description" content="Turn rough notes about your background into a polished, ATS-ready CV and a tailored cover letter in minutes."/>
+    <link rel="icon" href="assets/RECOL.png"/>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="script.js" defer></script>
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="logo">ApplyCraft</div>
-        <span class="tagline">Automatic CV & Tailored Letter Studio</span>
+    <header class="site-nav" id="top">
+        <div class="nav-inner">
+            <a href="#top" class="brand">
+                <img src="assets/RECOL.png" alt="Recol Builder Assist logo" class="brand-mark"/>
+                <span class="brand-name">Recol Builder Assist</span>
+            </a>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="#how">How it works</a>
+                <a href="#build">Build</a>
+                <a href="#news">Updates</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="#build" class="btn-primary btn-nav">Start building</a>
+                <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <main class="workspace">
-        <!-- Left Panel: Inputs -->
-         <section class="panel input-panel">
-            <h2>1. Your Details & Goal</h2>
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="fullName" placeholder="Example: Sarah Jenkins" required/>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <p class="hero-eyebrow">Free CV & cover letter builder</p>
+            <h1 class="hero-title">Explain. Recover. Apply.</h1>
+            <p class="hero-sub">
+                Tell it what you've done, even in rough, unpolished notes. Recol Builder Assist
+                turns that into a clean, ATS-ready CV and a tailored cover letter, ready to send.
+            </p>
+            <div class="hero-cta">
+                <a href="#build" class="btn-primary btn-large">Build my CV & letter</a>
+                <a href="#how" class="btn-ghost">See how it works</a>
             </div>
+        </div>
+    </section>
 
-            <div class="row">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="email" placeholder="sarah@example.com"/>
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how">
+        <div class="section-inner">
+            <h2 class="section-title">Three steps. That's it.</h2>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-index">1</span>
+                    <h3>Explain</h3>
+                    <p>Describe your background in your own words — jobs, skills, even messy bullet points. No formatting needed.</p>
                 </div>
-                <div class="form-group">
-                    <label>Phone / City</label>
-                    <input type="text" id="phone" placeholder="+237 6 12 87 63 75"/>
+                <div class="step">
+                    <span class="step-index">2</span>
+                    <h3>Recover</h3>
+                    <p>We recover the structure and language a hiring manager expects, and organize it into a real CV and letter.</p>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group">
-                    <label>Target Role</label>
-                    <input type="text" id="targetJob" placeholder="Example: Project Manager" required/>
-                </div>
-                <div class="form-group">
-                    <label>Company / Institution</label>
-                    <input type="text" id="company" placeholder="Example: Arc Corp"/>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group">
-                    <label>Experience Level</label>
-                    <select id="experienceLevel">
-                        <option value="Entry / Student">Student / Entry-Level</option>
-                        <option value="Mid-Level" selected>Mid-Level Professional</option>
-                        <option value="Senior / Executive">Senior / Career Switcher</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Tone</label>
-                    <select id="tone">
-                        <option value="Confident & Professional" selected>Confident & Professional</option>
-                        <option value="Formal & Traditional">Formal & Traditional</option>
-                        <option value="Modern & Creative">Modern & Creative</option>
-                    </select>
+                <div class="step">
+                    <span class="step-index">3</span>
+                    <h3>Apply</h3>
+                    <p>Edit anything inline, copy the text, or print straight to PDF — then send your application.</p>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="form-group">
-                <label>Describe your experience / key skills (even rough notes work)</label>
-                <textarea id="bio" rows="6" placeholder="Example: 3 years handling logistics in retail. Good with Excel, team leading, solving shipping delays. Organized 4 major university events..."></textarea>
+    <!-- BUILD (original tool, unchanged functionality) -->
+    <section class="build-section" id="build">
+        <div class="section-inner">
+            <h2 class="section-title">Build your documents</h2>
+
+            <main class="workspace">
+                <section class="panel input-panel">
+                    <h2>1. Your Details & Goal</h2>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="fullName" placeholder="Example: Sarah Jenkins" required/>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" placeholder="sarah@example.com"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone / City</label>
+                            <input type="text" id="phone" placeholder="+237 6 12 87 63 75"/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Target Role</label>
+                            <input type="text" id="targetJob" placeholder="Example: Project Manager" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Company / Institution</label>
+                            <input type="text" id="company" placeholder="Example: Arc Corp"/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Experience Level</label>
+                            <select id="experienceLevel">
+                                <option value="Entry / Student">Student / Entry-Level</option>
+                                <option value="Mid-Level" selected>Mid-Level Professional</option>
+                                <option value="Senior / Executive">Senior / Career Switcher</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tone</label>
+                            <select id="tone">
+                                <option value="Confident & Professional" selected>Confident & Professional</option>
+                                <option value="Formal & Traditional">Formal & Traditional</option>
+                                <option value="Modern & Creative">Modern & Creative</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Describe your experience / key skills (even rough notes work)</label>
+                        <textarea id="bio" rows="6" placeholder="Example: 3 years handling logistics in retail. Good with Excel, team leading, solving shipping delays. Organized 4 major university events..."></textarea>
+                    </div>
+
+                    <button id="generateBtn" class="btn-primary">Generate CV & Letter</button>
+                </section>
+
+                <section class="panel output-panel">
+                    <div class="tabs-header">
+                        <div class="tabs">
+                            <button class="tab-btn active" data-tab="cvView">CV Document</button>
+                            <button class="tab-btn" data-tab="letterView">Letter of Submission</button>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="copyBtn" class="btn-secondary">Copy Text</button>
+                            <button id="printBtn" class="btn-secondary">Print / Save PDF</button>
+                        </div>
+                    </div>
+
+                    <div class="edit-hint">Tip: You can click anywhere inside the document below to edit the text directly!</div>
+
+                    <div class="document-container">
+                        <div id="cvView" class="tab-content active doc-sheet">
+                            <div class="placeholder-state">Fill out your details on the left and click "generate" to preview your CV.</div>
+                        </div>
+
+                        <div id="letterView" class="tab-content doc-sheet">
+                            <div class="placeholder-state">Your tailored submission letter will appear here.</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </section>
+
+    <!-- NEWS / UPDATES -->
+    <section class="news-section" id="news">
+        <div class="section-inner">
+            <div class="news-header">
+                <h2 class="section-title">Updates for busy job-seekers</h2>
+                <p class="news-sub">A quick scan, not another feed to manage. Refreshed content on job-hunting and hiring trends.</p>
             </div>
-
-            <button id="generateBtn" class="btn-primary">Generate CV & Letter</button>
-         </section>
-
-         <!-- Right Panel: Live Output -->
-          <section class="panel output-panel">
-            <div class="tabs-header">
-                <div class="tabs">
-                    <button class="tab-btn active" data-tab="cvView">CV Document</button>
-                    <button class="tab-btn" data-tab="letterView">Letter of Submission</button>
-                </div>
-                <div class="action-buttons">
-                    <button id="copyBtn" class="btn-secondary">Copy Text</button>
-                    <button id="printBtn" class="btn-secondary">Print / Save PDF</button>
-                </div>
+            <div class="news-grid" id="newsGrid">
+                <div class="news-card news-skeleton">Loading updates…</div>
             </div>
+        </div>
+    </section>
 
-            <div class="edit-hint">Tip: You can click anywhere inside the document below to edit the text directly!</div>
-
-            <div class="document-container">
-                <div id="cvView" class="tab-content active doc-sheet">
-                    <div class="placeholder-state">Fill out your details on the left and  click "generate" to preview your CV.</div>
-                </div>
-
-                <div id="letterView" class="tab-content doc-sheet">
-                    <div class="placeholder-state">Your tailored submission letter will appear here.</div>
-                </div>
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="assets/RECOL.png" alt="Recol Builder Assist logo" class="brand-mark small"/>
+                <span>Recol Builder Assist</span>
             </div>
-          </section>
-    </main>
-    
+            <p class="footer-tagline">Explain. Recover. Apply.</p>
+            <p class="footer-copy">&copy; <span id="year"></span> Recol Builder Assist. Built to get you to "yes" faster.</p>
+        </div>
+    </footer>
+
 </body>
 </html>
