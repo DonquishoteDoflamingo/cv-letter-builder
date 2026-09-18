@@ -18,6 +18,101 @@ const openai = new OpenAI({
 
 const MODEL = isGroq ? 'openai/gpt-oss-120b' : 'gpt-4o-mini';
 
+// Curated fallback content — shown if the news feed fails to load for any
+// reason (outage, network hiccup, unexpected format change, etc.).
+const FALLBACK_UPDATES = [
+    {
+        tag: 'Resume tip',
+        title: 'Quantify your impact, not just your duties',
+        summary: 'Hiring managers skim. Numbers ("cut costs 18%", "led team of 6") catch the eye far faster than a list of responsibilities.',
+        source: 'Recol Builder Assist'
+    },
+    {
+        tag: 'Job market',
+        title: 'ATS systems now read structure, not just keywords',
+        summary: 'Modern applicant-tracking software increasingly parses headings and bullet structure — clean formatting matters as much as wording.',
+        source: 'Recol Builder Assist'
+    },
+    {
+        tag: 'Cover letters',
+        title: 'Shorter is working better in 2026',
+        summary: 'Recruiters report skimming cover letters in under 20 seconds. Three tight paragraphs beat one dense page.',
+        source: 'Recol Builder Assist'
+    }
+];
+
+// Tiny helper: pulls one tag's text out of a chunk of XML, strips CDATA
+// wrappers, decodes the handful of entities RSS actually uses, and strips
+// any nested HTML tags. Good enough for Google News' feed shape — no XML
+// parsing library needed.
+function extractTag(xml, tag) {
+    const match = xml.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`));
+    if (!match) return '';
+    return match[1]
+        .replace('<![CDATA[', '').replace(']]>', '')
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+        .replace(/<[^>]+>/g, '')
+        .trim();
+}
+
+// Google News' RSS search feed — a plain public URL, no key, no signup,
+// no console. It's unofficial (Google doesn't document or guarantee it),
+// so we always have FALLBACK_UPDATES ready in case it ever changes shape.
+async function fetchNewsFromGoogleNews() {
+    const query = encodeURIComponent('job search tips OR resume advice OR career advice');
+    const url = `https://news.google.com/rss/search?q=${query}&hl=en-US&gl=US&ceid=US:en`;
+
+    const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+    if (!res.ok) throw new Error(`Google News feed responded ${res.status}`);
+    const xml = await res.text();
+
+    const rawItems = (xml.match(/<item>[\s\S]*?<\/item>/g) || []).slice(0, 3);
+    if (rawItems.length === 0) throw new Error('No items in feed');
+
+    return rawItems.map(itemXml => {
+        const rawTitle = extractTag(itemXml, 'title');
+        // Google News titles are usually "Headline - Source Name"
+        const splitAt = rawTitle.lastIndexOf(' - ');
+        const title = splitAt > -1 ? rawTitle.slice(0, splitAt) : rawTitle;
+        const source = splitAt > -1 ? rawTitle.slice(splitAt + 3) : 'Google News';
+        const pubDate = extractTag(itemXml, 'pubDate');
+
+        return {
+            tag: 'News',
+            title,
+            summary: `Full story via ${source}.`,
+            source,
+            date: pubDate ? new Date(pubDate).toLocaleDateString() : '',
+            url: extractTag(itemXml, 'link')
+        };
+    });
+}
+
+// Server-side cache: one feed fetch per 24h, no matter how many visitors
+// load the page — naturally delivers "a few updates per day" and is
+// gentle to Google's servers.
+let newsCache = { data: null, timestamp: 0 };
+const NEWS_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+
+app.get('/api/news', async (req, res) => {
+    const now = Date.now();
+
+    if (newsCache.data && (now - newsCache.timestamp) < NEWS_CACHE_TTL_MS) {
+        return res.json(newsCache.data);
+    }
+
+    try {
+        const items = await fetchNewsFromGoogleNews();
+        newsCache = { data: items, timestamp: now };
+        res.json(items);
+    } catch (error) {
+        console.error('News fetch error:', error);
+        newsCache = { data: FALLBACK_UPDATES, timestamp: now };
+        res.json(FALLBACK_UPDATES);
+    }
+});
+
 // Generation endpoint
 app.post('/api/generate', async (req, res) => {
     const {
