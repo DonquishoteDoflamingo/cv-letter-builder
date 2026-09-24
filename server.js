@@ -9,6 +9,12 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Explicit route so "/app" resolves cleanly (the static middleware alone
+// won't map a path with no extension to app.html).
+app.get('/app', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'app.html'));
+});
+
 // Initializing AI Client
 const isGroq = process.env.AI_PROVIDER === 'groq';
 const openai = new OpenAI({
@@ -17,6 +23,98 @@ const openai = new OpenAI({
 });
 
 const MODEL = isGroq ? 'openai/gpt-oss-120b' : 'gpt-4o-mini';
+
+// Language names for the AI prompt, keyed by the same codes the frontend uses.
+const LANGUAGE_NAMES = {
+    en: 'English',
+    fr: 'French'
+};
+
+// Small, dependency-free per-IP rate limiter for the AI endpoint specifically
+// — that's the one that costs real money/quota per call, unlike static
+// pages. 8 requests per 10 minutes per IP is generous for a real user
+// trying the tool, but stops a script from burning your daily Groq quota
+// in seconds.
+const rateLimitHits = new Map();
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX = 8;
+
+function isRateLimited(ip) {
+    const now = Date.now();
+    const hits = (rateLimitHits.get(ip) || []).filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+    hits.push(now);
+    rateLimitHits.set(ip, hits);
+    return hits.length > RATE_LIMIT_MAX;
+}
+
+// Shared helper: the real visitor IP, respecting Render's proxy header.
+function getClientIp(req) {
+    return req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress;
+}
+
+// --- Visitor country auto-detect (for pre-selecting the phone code) ---
+// Done server-side on purpose: the server already sees the real client IP
+// from the request itself, so nothing needs exposing in the browser, and
+// nothing the client sends can be spoofed to fake a different country.
+//
+// Design choices, deliberately conservative:
+// - ipapi.co over ip-api.com: it supports HTTPS, keeping the whole request
+//   encrypted end to end.
+// - Fails open everywhere: any error, timeout, or rate limit just returns
+//   { country: null } so the page's own default silently takes over. This
+//   endpoint should never be able to break or slow down the form.
+// - Per-IP cache (6h) so a visitor reloading the page doesn't trigger a
+//   fresh lookup every time.
+// - A global hourly cap protects the shared free quota even if someone
+//   spoofs many different IPs to bypass the per-IP cache.
+// - Nothing is logged or persisted beyond this in-memory cache, which
+//   clears on every restart.
+const geoCache = new Map(); // ip -> { country, timestamp }
+const GEO_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+const GEO_GLOBAL_MAX_PER_HOUR = 200;
+let geoCallsThisHour = 0;
+let geoWindowStart = Date.now();
+
+app.get('/api/geo', async (req, res) => {
+    const ip = getClientIp(req);
+
+    // Local/dev traffic has no public IP to look up — nothing to detect.
+    if (!ip || ip === '::1' || ip.startsWith('127.') || ip.startsWith('::ffff:127.')) {
+        return res.json({ country: null });
+    }
+
+    const cached = geoCache.get(ip);
+    if (cached && (Date.now() - cached.timestamp) < GEO_CACHE_TTL_MS) {
+        return res.json({ country: cached.country });
+    }
+
+    if (Date.now() - geoWindowStart > 60 * 60 * 1000) {
+        geoCallsThisHour = 0;
+        geoWindowStart = Date.now();
+    }
+    if (geoCallsThisHour >= GEO_GLOBAL_MAX_PER_HOUR) {
+        return res.json({ country: null });
+    }
+    geoCallsThisHour++;
+
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3000);
+
+        const geoRes = await fetch(`https://ipapi.co/${ip}/json/`, { signal: controller.signal });
+        clearTimeout(timeout);
+
+        if (!geoRes.ok) throw new Error(`Geo API responded ${geoRes.status}`);
+        const data = await geoRes.json();
+        const country = data.country_code || null;
+
+        geoCache.set(ip, { country, timestamp: Date.now() });
+        res.json({ country });
+    } catch (error) {
+        console.error('Geo lookup error:', error.message);
+        res.json({ country: null });
+    }
+});
 
 // Curated fallback content — shown if the news feed fails to load for any
 // reason (outage, network hiccup, unexpected format change, etc.).
@@ -115,6 +213,11 @@ app.get('/api/news', async (req, res) => {
 
 // Generation endpoint
 app.post('/api/generate', async (req, res) => {
+    const clientIp = getClientIp(req);
+    if (isRateLimited(clientIp)) {
+        return res.status(429).json({ error: 'Too many requests. Please wait a few minutes and try again.' });
+    }
+
     const {
         fullName,
         email,
@@ -123,27 +226,48 @@ app.post('/api/generate', async (req, res) => {
         targetJob,
         company,
         experienceLevel,
-        tone
+        tone,
+        language
     } = req.body;
 
     if (!fullName || !bio || !targetJob) {
         return res.status(400).json({ error: 'Please provide at least your name, background, and target job.'});
     }
 
+    // Cap input length: protects against runaway token costs and
+    // prompt-injection attempts hidden in a huge paste.
+    const MAX_BIO_LENGTH = 4000;
+    const MAX_SHORT_FIELD_LENGTH = 200;
+    if (bio.length > MAX_BIO_LENGTH) {
+        return res.status(400).json({ error: `Please keep your background notes under ${MAX_BIO_LENGTH} characters.` });
+    }
+    for (const [label, value] of Object.entries({ fullName, targetJob, company, phone, email })) {
+        if (value && value.length > MAX_SHORT_FIELD_LENGTH) {
+            return res.status(400).json({ error: `${label} is too long.` });
+        }
+    }
+
+    const languageName = LANGUAGE_NAMES[language] || 'English';
+
     const systemInstruction = `You are an elite universal career consultant and hiring manager. Your job is to transform raw, messy user input into:
     1. A world-class, ATS-compliant CV formatted in clean HTML.
     2. A compelling, non-robotic or non-generic Letter of Submission / Cover Letter.
-    
+    3. A quick, honest ATS-compatibility self-assessment of what you produced.
+
     UNIVERSAL ADAPTABILITY RULES:
-    - For Entry-Level / Students: Focus on transferable skills, coursework, informal work, enthusiasm, and rapid learning ability.
+    - For Entry-Level / Students: Focus on transferable skills, coursework, informal work, enthusiasm, and rapid learning ability. Just arrange the content and language to make it feel professional and credible, but do not overdo it, and neither should you use overly complex language, or add what has not been specified by the user, especially for experience, company or institution.
     - For Trades / Service / Blue-Collar: Focus on reliability, hands-on skills, safety, speed, and proven output.
     - For Mid/Senior / Tech / Corporate: Use active verbs, quantified results (Example: "improved by X%", "managed team of Y"), and strategic leadership keywords.
     - Tone: Natural, confident, and human. Avoid clichés like "I am writing with immense delight" or "I am a motivated self-starter".
-    
+    - Write everything — the CV, the letter, and the ATS tip — entirely in ${languageName}. Keep the JSON keys themselves in English exactly as specified below.
+
     CRITICAL: Return ONLY a valid JSON object matching this exact schema:
     {
     "cv": "<div class='cv-rendered'>...HTML with <h3>, <p>, <ul>, <li>, <strong> tags...</div>",
-    "letter": "Text of the letter with standard spacing..."
+    "letter": "Text of the letter with standard spacing...",
+    "atsScore": 0-100 integer estimating how well this CV would pass an ATS scan for the target role,
+    "atsKeywords": ["3 to 6 short keywords/phrases from the target role that this CV successfully includes"],
+    "atsTip": "One short, specific sentence suggesting the single highest-impact improvement"
     }`;
 
     const userPrompt = `

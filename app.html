@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Recol Builder Assist — Explain. Recover. Apply.</title>
+    <meta name="description" content="Turn rough notes about your background into a polished, ATS-ready CV and a tailored cover letter in minutes."/>
+    <link rel="icon" href="assets/RECOL.png"/>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="translations.js" defer></script>
+    <script src="country-codes.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div id="splashScreen" class="splash-screen">
+        <img src="assets/RECOL.png" alt="Recol Builder Assist" class="splash-logo"/>
+        <p class="splash-slogan" data-i18n="footer.tagline">Explain. Recover. Apply.</p>
+    </div>
+
+    <header class="site-nav" id="top">
+        <div class="nav-inner">
+            <a href="#top" class="brand">
+                <img src="assets/RECOL.png" alt="Recol Builder Assist logo" class="brand-mark"/>
+                <span class="brand-name">Recol Builder Assist</span>
+            </a>
+            <div class="nav-actions">
+            <button id="historyBtn" class="btn-secondary">Saved History (<span id="historyCount">0</span>)</button>
+        </div>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="#how" data-i18n="nav.how">How it works</a>
+                <a href="#build" data-i18n="nav.build">Build</a>
+                <a href="#news" data-i18n="nav.news">Updates</a>
+            </nav>
+
+            <div class="nav-actions">
+                <select class="lang-select" aria-label="Language">
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                </select>
+                <a href="#build" class="btn-primary btn-nav" data-i18n="nav.start">Start building</a>
+                <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <p class="hero-eyebrow" data-i18n="hero.eyebrow">Free CV & cover letter builder</p>
+            <h1 class="hero-title" data-i18n="hero.title">Explain. Recover. Apply.</h1>
+            <p class="hero-sub" data-i18n="hero.sub">
+                Tell it what you've done, even in rough, unpolished notes. Recol Builder Assist
+                turns that into a clean, ATS-ready CV and a tailored cover letter, ready to send.
+            </p>
+            <div class="hero-cta">
+                <a href="#build" class="btn-primary btn-large" data-i18n="hero.ctaPrimary">Build my CV & letter</a>
+                <a href="#how" class="btn-ghost" data-i18n="hero.ctaSecondary">See how it works</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how">
+        <div class="section-inner">
+            <h2 class="section-title" data-i18n="how.title">Three steps. That's it.</h2>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-index">1</span>
+                    <h3 data-i18n="how.step1Title">Explain</h3>
+                    <p data-i18n="how.step1Text">Describe your background in your own words — jobs, skills, even messy bullet points. No formatting needed.</p>
+                </div>
+                <div class="step">
+                    <span class="step-index">2</span>
+                    <h3 data-i18n="how.step2Title">Recover</h3>
+                    <p data-i18n="how.step2Text">We recover the structure and language a hiring manager expects, and organize it into a real CV and letter.</p>
+                </div>
+                <div class="step">
+                    <span class="step-index">3</span>
+                    <h3 data-i18n="how.step3Title">Apply</h3>
+                    <p data-i18n="how.step3Text">Edit anything inline, copy the text, or print straight to PDF — then send your application.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BUILD (original tool, unchanged functionality) -->
+    <section class="build-section" id="build">
+        <div class="section-inner">
+            <h2 class="section-title">Build your documents</h2>
+
+            <main class="workspace">
+                <section class="panel input-panel">
+                    <div class="panel-header">
+                        <h2 data-i18n="build.panelTitle">1. Your Details & Goal</h2>
+                        <button id="resetFormBtn" class="btn-text" title="Clear inputs" data-i18n="build.clearForm">Clear Form</button>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="build.fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="Example: Sarah Jenkins" required/>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label data-i18n="build.email">Email</label>
+                            <input type="email" id="email" placeholder="sarah@example.com"/>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="build.phone">Phone / City</label>
+                            <div class="phone-field">
+                                <select id="countryCode" class="country-select" aria-label="Country code"></select>
+                                <input type="tel" id="phoneNumber" class="phone-input" placeholder="6 12 87 63 75"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label data-i18n="build.targetRole">Target Role</label>
+                            <input type="text" id="targetJob" placeholder="Example: Project Manager" required/>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="build.company">Company / Institution</label>
+                            <input type="text" id="company" placeholder="Example: Arc Corp"/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label data-i18n="build.experience">Experience Level</label>
+                            <select id="experienceLevel">
+                                <option value="Entry / Student" data-i18n="build.expEntry">Student / Entry-Level</option>
+                                <option value="Mid-Level" selected data-i18n="build.expMid">Mid-Level Professional</option>
+                                <option value="Senior / Executive" data-i18n="build.expSenior">Senior / Career Switcher</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="build.tone">Tone</label>
+                            <select id="tone">
+                                <option value="Confident & Professional" selected data-i18n="build.toneConfident">Confident & Professional</option>
+                                <option value="Formal & Traditional" data-i18n="build.toneFormal">Formal & Traditional</option>
+                                <option value="Modern & Creative" data-i18n="build.toneModern">Modern & Creative</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="build.bioLabel">Describe your experience / key skills (rough notes is okay)</label>
+                        <textarea id="bio" rows="6" placeholder="Example: 3 years handling logistics in retail. Good with Excel, team leading, solving shipping delays..."></textarea>
+                    </div>
+
+                    <button id="generateBtn" class="btn-primary" data-i18n="build.generate">Generate CV & Letter</button>
+                </section>
+
+                <section class="panel output-panel">
+                    <!-- ATS Insights Bar (Hidden until generated) -->
+                     <div id="atsInsightsBar" class="ats-insights-bar" style="display: none;">
+                        <div class="ats-score-badge">
+                            <span class="score-label">ATS Match</span>
+                            <span id="atsScoreValue" class="score-number">--</span>
+                        </div>
+                        <div class="ats-details">
+                            <div id="atsKeywords" class="keyword-chips"></div>
+                            <p id="atsTip" class="ats-tip"></p>
+                        </div>
+                     </div>
+                     
+                    <div class="tabs-header">
+                        <div class="tabs">
+                            <button class="tab-btn active" data-tab="cvView" data-i18n="build.tabCv">CV Document</button>
+                            <button class="tab-btn" data-tab="letterView" data-i18n="build.tabLetter">Letter of Submission</button>
+                        </div>
+
+                        <!-- Template Selector -->
+                         <div class="style-picker">
+                            <label for="templateTheme" data-i18n="build.theme">Theme:</label>
+                            <select id="templateTheme">
+                                <option value="theme-modern" selected>Modern Blue</option>
+                                <option value="theme-classic">Classic Executive</option>
+                                <option value="theme-minimal">Minimal Clean</option>
+                            </select>
+                            <label for="colorTemplate" data-i18n="build.color">Color:</label>
+                            <select id="colorTemplate">
+                                <option value="color-classic" selected data-i18n="build.colorClassic">Classic White</option>
+                                <option value="color-skyblue" data-i18n="build.colorSkyBlue">Sky Blue</option>
+                                <option value="color-paleblue" data-i18n="build.colorPaleBlue">Pale Blue</option>
+                                <option value="color-palered" data-i18n="build.colorPaleRed">Pale Red</option>
+                            </select>
+                         </div>
+                        <div class="action-buttons">
+                            <button id="copyBtn" class="btn-secondary" data-i18n="build.copy">Copy Resume</button>
+                            <button id="whatsappBtn" class="btn-secondary btn-whatsapp" data-i18n="build.whatsapp">Send via WhatsApp</button>
+                            <button id="wordBtn" class="btn-secondary" data-i18n="build.word">Save as Word</button>
+                            <button id="printBtn" class="btn-secondary" data-i18n="build.print">Print / Save PDF</button>
+                        </div>
+                    </div>
+
+                    <div class="edit-hint" data-i18n="build.editHint">Tip: You can click anywhere inside the document below to edit the text directly!</div>
+
+                    <div class="document-container">
+                        <div id="cvView" class="tab-content active doc-sheet theme-modern color-classic">
+                            <div class="placeholder-state">Fill out your details on the left and click "generate" to preview your CV.</div>
+                        </div>
+
+                        <div id="letterView" class="tab-content doc-sheet theme-modern color-classic">
+                            <div class="placeholder-state">Your tailored submission letter will appear here.</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- History Modal / Drawer -->
+             <div id="historyModal" class="modal-backdrop">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Your Saved Applications</h3>
+                        <button id="closeHistoryBtn" class="close-btn">&times;</button>
+                    </div>
+                    <div id="historyList" class="history-list">
+                        <!-- Injected with JavaScript -->
+                    </div>
+                </div>
+             </div>
+        </div>
+    </section>
+
+    <!-- NEWS / UPDATES -->
+    <section class="news-section" id="news">
+        <div class="section-inner">
+            <div class="news-header">
+                <h2 class="section-title" data-i18n="news.title">Updates for busy job-seekers</h2>
+                <p class="news-sub" data-i18n="news.sub">A quick scan, not another feed to manage. Refreshed content on job-hunting and hiring trends.</p>
+            </div>
+            <div class="news-grid" id="newsGrid">
+                <div class="news-card news-skeleton">Loading updates…</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="assets/RECOL.png" alt="Recol Builder Assist logo" class="brand-mark small"/>
+                <span>Recol Builder Assist</span>
+            </div>
+            <p class="footer-tagline" data-i18n="footer.tagline">Explain. Recover. Apply.</p>
+            <p class="footer-copy">&copy; <span id="year"></span> Recol Builder Assist. Built to get you to "yes" faster.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

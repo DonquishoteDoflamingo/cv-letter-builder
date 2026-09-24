@@ -1,193 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Recol Builder Assist — Explain. Recover. Apply.</title>
-    <meta name="description" content="Turn rough notes about your background into a polished, ATS-ready CV and a tailored cover letter in minutes."/>
-    <link rel="icon" href="assets/RECOL.png"/>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RECOL BUILDER ASSIST | Land Your Dream Job in Minutes</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icon-192.png">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="landing.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="script.js" defer></script>
+    <script src="translations.js" defer></script>
+    <script src="register-sw.js" defer></script>
+    <script src="landing.js" defer></script>
 </head>
 <body>
+    <div id="splashScreen" class="splash-screen">
+        <img src="assets/Recol Load.png" alt="Recol Builder Assist" class="splash-logo"/>
+        <p class="splash-slogan" data-i18n="footer.tagline">Explain. Recover. Apply.</p>
+    </div>
 
-    <header class="site-nav" id="top">
-        <div class="nav-inner">
-            <a href="#top" class="brand">
-                <img src="assets/RECOL.png" alt="Recol Builder Assist logo" class="brand-mark"/>
-                <span class="brand-name">Recol Builder Assist</span>
-            </a>
-
-            <nav class="nav-links" id="navLinks">
-                <a href="#how">How it works</a>
-                <a href="#build">Build</a>
-                <a href="#news">Updates</a>
-            </nav>
-
-            <div class="nav-actions">
-                <a href="#build" class="btn-primary btn-nav">Start building</a>
-                <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
-                    <span></span><span></span><span></span>
-                </button>
-            </div>
+    <!-- Navigation -->
+     <header class="navbar">
+        <div class="logo"><img src="assets/Recol Load.png" height="50" width="60" alt="Recol Builder Assist logo">RECOL BUILDER ASSIST</div>
+        <nav class="nav-links">
+            <a href="#how-it-works" data-i18n="landing.navHow">How It Works</a>
+            <a href="#features" data-i18n="landing.navFeatures">Features</a>
+            <a href="#faq" data-i18n="landing.navFaq">FAQ</a>
+        </nav>
+        <div class="nav-actions">
+            <select class="lang-select" aria-label="Language">
+                <option value="en">EN</option>
+                <option value="fr">FR</option>
+                <option value="de">DE</option>
+                <option value="es">ES</option>
+            </select>
+            <a href="/app" class="btn-nav" data-i18n="landing.launch">Launch Studio</a>
         </div>
-    </header>
+     </header>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-inner">
-            <p class="hero-eyebrow">Free CV & cover letter builder</p>
-            <h1 class="hero-title">Explain. Recover. Apply.</h1>
-            <p class="hero-sub">
-                Tell it what you've done, even in rough, unpolished notes. Recol Builder Assist
-                turns that into a clean, ATS-ready CV and a tailored cover letter, ready to send.
-            </p>
-            <div class="hero-cta">
-                <a href="#build" class="btn-primary btn-large">Build my CV & letter</a>
-                <a href="#how" class="btn-ghost">See how it works</a>
-            </div>
+     <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-badge" data-i18n="landing.heroBadge">Free ATS-Optimized Application Builder</div>
+        <h1><span data-i18n="landing.heroTitle">Stop Writing Boring Applications.</span> <br><span class="gradient-text" data-i18n="landing.heroTitleAccent">Land Interviews Faster.</span></h1>
+        <p class="hero-subtitle" data-i18n="landing.heroSubtitle">
+            Transform messy notes, informal experience, or rough bullet points into an ATS-compliant CV and a persuasive, human letter of submission in minutes.
+        </p>
+        <div class="hero-actions">
+            <a href="/app" class="btn-hero-primary" data-i18n="landing.ctaPrimary">Start Building Now – Free</a>
+            <a href="#how-it-works" class="btn-hero-secondary" data-i18n="landing.ctaSecondary">See How It Works</a>
         </div>
-    </section>
 
-    <!-- HOW IT WORKS -->
-    <section class="how" id="how">
-        <div class="section-inner">
-            <h2 class="section-title">Three steps. That's it.</h2>
-            <div class="steps">
-                <div class="step">
-                    <span class="step-index">1</span>
-                    <h3>Explain</h3>
-                    <p>Describe your background in your own words — jobs, skills, even messy bullet points. No formatting needed.</p>
+        <!-- Live Preview Mockup -->
+         <div class="hero-preview">
+            <div class="preview-card">
+                <div class="preview-header">
+                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    <span class="preview-title" data-i18n="landing.previewTitle">RECOL BUILDER ASSIST Studio &bull; Realtime Application Generator</span>
                 </div>
-                <div class="step">
-                    <span class="step-index">2</span>
-                    <h3>Recover</h3>
-                    <p>We recover the structure and language a hiring manager expects, and organize it into a real CV and letter.</p>
+                <div class="preview-body">
+                    <div class="preview-side left">
+                        <h4 data-i18n="landing.previewYourStory">Your Story</h4>
+                        <div class="dummy-text short"></div>
+                        <div class="dummy-text"></div>
+                        <div class="dummy-text long"></div>
+                    </div>
+                    <div class="preview-side right">
+                        <div class="ats-pill">ATS Match: 94%</div>
+                        <h4 data-i18n="landing.previewTailored">Tailored CV & Submission Letter</h4>
+                        <div class="dummy-text long"></div>
+                        <div class="dummy-text"></div>
+                        <div class="dummy-text short"></div>
+                    </div>
                 </div>
-                <div class="step">
-                    <span class="step-index">3</span>
-                    <h3>Apply</h3>
-                    <p>Edit anything inline, copy the text, or print straight to PDF — then send your application.</p>
+            </div>
+         </div>
+      </section>
+
+      <!-- Built For Everyone -->
+       <section id="features" class="section">
+        <h2 class="section-title" data-i18n="landing.featuresTitle">Built for Everyone, Any Career</h2>
+        <p class="section-subtitle" data-i18n="landing.featuresSubtitle">No matter your experience level, Recol translates your real-world background into professional terminology.</p>
+
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-icon"></div>
+                <h3 data-i18n="landing.card1Title">Students & Beginners</h3>
+                <p data-i18n="landing.card1Text">Turn university coursework, volunteer gigs, and informal projects into impressive, ATS-ready competencies.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"></div>
+                <h3 data-i18n="landing.card2Title">Trades & Operations</h3>
+                <p data-i18n="landing.card2Text">Highlight reliability, hands-on expertise, safety certifications, and a proven work ethic with zero mistakes.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"></div>
+                <h3 data-i18n="landing.card3Title">Career Switchers & Pros</h3>
+                <p data-i18n="landing.card3Text">Reframe your transferable skills and leadership track record to align directly with a new industry's demands.</p>
+            </div>
+        </div>
+       </section>
+
+       <!-- How It Works -->
+        <section id="how-it-works" class="section alt-bg">
+            <h2 class="section-title" data-i18n="landing.howTitle">How It Works in 3 Steps</h2>
+
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <h3 data-i18n="landing.step1Title">Outline Your Experience</h3>
+                    <p data-i18n="landing.step1Text">Type rough notes or bullet points about what you've done. No formal writing skills required.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <h3 data-i18n="landing.step2Title">Paste Target Role or Job Ad</h3>
+                    <p data-i18n="landing.step2Text">Enter your target position or paste the job description for automated keyword matching.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <h3 data-i18n="landing.step3Title">Export And Apply</h3>
+                    <p data-i18n="landing.step3Text">Review your ATS-optimized CV and persuasive submission letter. Edit live, print to PDF, or copy.</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- BUILD (original tool, unchanged functionality) -->
-    <section class="build-section" id="build">
-        <div class="section-inner">
-            <h2 class="section-title">Build your documents</h2>
+        <!-- FAQ Section -->
+         <section id="faq" class="section">
+            <h2 class="section-title" data-i18n="landing.faqTitle">Frequently Asked Questions</h2>
 
-            <main class="workspace">
-                <section class="panel input-panel">
-                    <h2>1. Your Details & Goal</h2>
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="fullName" placeholder="Example: Sarah Jenkins" required/>
-                    </div>
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <h4 data-i18n="landing.faq1Q">Are the generated documents ATS-friendly?</h4>
+                    <p data-i18n="landing.faq1A">Yes. Recol formats headings, bullets, and keywords so Applicant Tracking Systems (ATS) can parse your qualifications cleanly without getting rejected.</p>
+                </div>
 
-                    <div class="row">
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="email" placeholder="sarah@example.com"/>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone / City</label>
-                            <input type="text" id="phone" placeholder="+237 6 12 87 63 75"/>
-                        </div>
-                    </div>
+                <div class="faq-item">
+                    <h4 data-i18n="landing.faq2Q">Is Recol free to use?</h4>
+                    <p data-i18n="landing.faq2A">Yes, you can generate, edit, and export your CV and submission letters for free.</p>
+                </div>
 
-                    <div class="row">
-                        <div class="form-group">
-                            <label>Target Role</label>
-                            <input type="text" id="targetJob" placeholder="Example: Project Manager" required/>
-                        </div>
-                        <div class="form-group">
-                            <label>Company / Institution</label>
-                            <input type="text" id="company" placeholder="Example: Arc Corp"/>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <label>Experience Level</label>
-                            <select id="experienceLevel">
-                                <option value="Entry / Student">Student / Entry-Level</option>
-                                <option value="Mid-Level" selected>Mid-Level Professional</option>
-                                <option value="Senior / Executive">Senior / Career Switcher</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Tone</label>
-                            <select id="tone">
-                                <option value="Confident & Professional" selected>Confident & Professional</option>
-                                <option value="Formal & Traditional">Formal & Traditional</option>
-                                <option value="Modern & Creative">Modern & Creative</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Describe your experience / key skills (even rough notes work)</label>
-                        <textarea id="bio" rows="6" placeholder="Example: 3 years handling logistics in retail. Good with Excel, team leading, solving shipping delays. Organized 4 major university events..."></textarea>
-                    </div>
-
-                    <button id="generateBtn" class="btn-primary">Generate CV & Letter</button>
-                </section>
-
-                <section class="panel output-panel">
-                    <div class="tabs-header">
-                        <div class="tabs">
-                            <button class="tab-btn active" data-tab="cvView">CV Document</button>
-                            <button class="tab-btn" data-tab="letterView">Letter of Submission</button>
-                        </div>
-                        <div class="action-buttons">
-                            <button id="copyBtn" class="btn-secondary">Copy Text</button>
-                            <button id="printBtn" class="btn-secondary">Print / Save PDF</button>
-                        </div>
-                    </div>
-
-                    <div class="edit-hint">Tip: You can click anywhere inside the document below to edit the text directly!</div>
-
-                    <div class="document-container">
-                        <div id="cvView" class="tab-content active doc-sheet">
-                            <div class="placeholder-state">Fill out your details on the left and click "generate" to preview your CV.</div>
-                        </div>
-
-                        <div id="letterView" class="tab-content doc-sheet">
-                            <div class="placeholder-state">Your tailored submission letter will appear here.</div>
-                        </div>
-                    </div>
-                </section>
-            </main>
-        </div>
-    </section>
-
-    <!-- NEWS / UPDATES -->
-    <section class="news-section" id="news">
-        <div class="section-inner">
-            <div class="news-header">
-                <h2 class="section-title">Updates for busy job-seekers</h2>
-                <p class="news-sub">A quick scan, not another feed to manage. Refreshed content on job-hunting and hiring trends.</p>
+                <div class="faq-item">
+                    <h4 data-i18n="landing.faq3Q">Can I edit the documents before saving?</h4>
+                    <p data-i18n="landing.faq3A">Absolutely! You can click anywhere inside the document preview to edit text, tweak wording, or adjust details directly before printing or copying.</p>
+                </div>
             </div>
-            <div class="news-grid" id="newsGrid">
-                <div class="news-card news-skeleton">Loading updates…</div>
-            </div>
-        </div>
-    </section>
+         </section>
 
-    <footer class="site-footer">
+         <!-- Footer CTA -->
+         <footer class="site-footer">
         <div class="footer-inner">
             <div class="footer-brand">
-                <img src="assets/RECOL.png" alt="Recol Builder Assist logo" class="brand-mark small"/>
+                <img src="assets/Recol Load.png" height="50" width="60" alt="Recol Builder Assist logo" class="brand-mark small"/>
                 <span>Recol Builder Assist</span>
             </div>
-            <p class="footer-tagline">Explain. Recover. Apply.</p>
+            <p class="footer-tagline" data-i18n="footer.tagline">Explain. Recover. Apply.</p>
             <p class="footer-copy">&copy; <span id="year"></span> Recol Builder Assist. Built to get you to "yes" faster.</p>
         </div>
     </footer>
-
 </body>
 </html>

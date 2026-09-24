@@ -33,6 +33,49 @@ a {
     text-decoration: none;
 }
 
+/* ---------- SPLASH SCREEN ---------- */
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: var(--bg);
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.splash-logo {
+    width: 480px;
+    height: 450px;
+    border-radius: 50%;
+    animation: splash-pulse 1.6s ease-in-out infinite;
+}
+
+.splash-slogan {
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+@keyframes splash-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.06); opacity: 0.85; }
+}
+
+.splash-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+body.splash-active {
+    overflow: hidden;
+}
+
 .section-inner {
     max-width: 1200px;
     margin: 0 auto;
@@ -274,8 +317,12 @@ a {
 
 .workspace {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 1fr 1.25fr;
     gap: 1.5rem;
+    padding: 1.25rem 2rem;
+    max-width: 1600px;
+    margin: auto;
+    height: calc(100vh - 65px);
 }
 
 .panel {
@@ -283,8 +330,19 @@ a {
     border-radius: var(--radius);
     padding: 1.5rem;
     overflow-y: auto;
+    border: 1px solid #334155;
 }
 
+.btn-text {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+.btn-text:hover {
+    color: #f87171;
+}
 h2 {
     font-size: 1.25rem;
     margin-bottom: 1.25rem;
@@ -324,9 +382,43 @@ input:focus, select:focus, textarea:focus {
     border-color: var(--accent);
 }
 
-.input-panel .btn-primary {
-    width: 100%;
+/* Phone: country-select + number input styled as one combined field */
+.phone-field {
+    display: flex;
+    border: 1px solid #333155;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg);
 }
+
+.phone-field:focus-within {
+    border-color: var(--accent);
+}
+
+.country-select {
+    border: none;
+    border-right: 1px solid #333155;
+    border-radius: 0;
+    max-width: 130px;
+}
+
+.phone-input {
+    flex: 1;
+    border: none;
+    border-radius: 0;
+    min-width: 0;
+}
+
+.btn-whatsapp {
+    background: #25d366;
+    color: #0b3b2e;
+    font-weight: 700;
+}
+
+.btn-whatsapp:hover {
+    opacity: 0.9;
+}
+
 
 /* Output Panel */
 .tabs-header {
@@ -358,9 +450,81 @@ input:focus, select:focus, textarea:focus {
     font-weight: 600;
 }
 
+.style-picker select {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* ATS Insights Bar */
+.ats-insights-bar {
+    background: #0b3b2e;
+    border: 1px solid #14532d;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.ats-score-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 70px;
+}
+
+.score-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #86efac;
+    letter-spacing: 0.05em;
+}
+
+.score-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #4ade80;
+}
+
+.ats-details {
+    flex: 1;
+}
+
+.keyword-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.keyword-chip {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.35);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.75rem;
+}
+
+.ats-tip {
+    font-size: 0.82rem;
+    color: #d1fae5;
+}
+
+/* Language selector (nav) */
+.lang-select {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
 .doc-sheet {
-    background: #ffffff;
-    color: #1e293b;
+    background: var(--doc-bg, #ffffff);
+    color: var(--doc-text, #1e293b);
     border-radius: 8px;
     padding: 2.5rem;
     min-height: 550px;
@@ -396,7 +560,7 @@ input:focus, select:focus, textarea:focus {
 
 .cv-rendered h3 {
     font-size: 1.5rem;
-    color: #0f172a;
+    color: var(--doc-heading, #0f172a);
     margin-bottom: 0.25rem;
 }
 
@@ -408,6 +572,110 @@ input:focus, select:focus, textarea:focus {
 .cv-rendered li {
     margin-bottom: 0.35rem;
 }
+
+/* CV AND LETTER THEMES */
+/* 1. Theme: Modern (Default) */
+.theme-modern {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.theme-modern h3 {
+    color: var(--doc-heading, #0284c7);
+    border-bottom: 2px solid #e0f2fe;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* 2. Theme: Classic Executive */
+.theme-classic h3 {
+    font-family: 'Merriweather', serif;
+    color: var(--doc-heading, #111827);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #111827;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* 3. Theme: Minimal */
+.theme-minimal {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.theme-minimal h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--doc-heading, #52525b);
+    margin-bottom: 0.3rem;
+    border: none;
+}
+
+/* Modal for History */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal-backdrop.show {
+    display: flex;
+}
+.modal-content {
+    background: #1e293b;
+    width: 90%;
+    max-width: 550px;
+    max-height: 80vh;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+.history-list {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.history-item {
+    background: #0f172a;
+    border: 1px solid #334155;
+    padding: 0.85rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.history-info h4 {
+    font-size: 0.95rem;
+    color: #38bdf8;
+}
+.history-info p {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+.history-item-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
 
 @media print {
     body * {
@@ -421,6 +689,59 @@ input:focus, select:focus, textarea:focus {
         left: 0;
         top: 0;
         width: 100%;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* ---------- INSTALL APP ---------- */
+.install-section {
+    padding: 3rem 0 5rem;
+}
+
+.install-card {
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--panel);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    /* Hidden by default: install-prompt.js reveals this (as flex) once it
+       knows there's actually something to install (or shows iOS steps). */
+    display: none;
+}
+
+.install-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    flex-shrink: 0;
+}
+
+.install-text {
+    flex: 1;
+}
+
+.install-text p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.35rem;
+}
+
+.install-ios-steps {
+    display: none; /* shown only on iOS, via install-prompt.js */
+    color: var(--accent) !important;
+    font-weight: 600;
+}
+
+.install-btn {
+    flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+    .install-card {
+        flex-direction: column;
+        text-align: center;
     }
 }
 
