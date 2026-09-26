@@ -8,6 +8,7 @@ const TRANSLATIONS = {
         'nav.how': 'How it works',
         'nav.build': 'Build',
         'nav.news': 'Updates',
+        'nav.home': 'Home',
         'nav.install': 'Install',
         'nav.start': 'Start building',
 
@@ -104,6 +105,7 @@ const TRANSLATIONS = {
         'nav.how': 'Comment ça marche',
         'nav.build': 'Créer',
         'nav.news': 'Actualités',
+        'nav.home': 'Accueil',
         'nav.install': 'Installer',
         'nav.start': 'Commencer',
 
@@ -200,6 +202,7 @@ const TRANSLATIONS = {
         'nav.how': 'So funktioniert es',
         'nav.build': 'Erstellen',
         'nav.news': 'Aktualisierungen',
+        'nav.home': 'Zuhause',
         'nav.install': 'Installieren',
         'nav.start': 'Baubeginn',
 
@@ -296,6 +299,7 @@ const TRANSLATIONS = {
         'nav.how': 'Cómo funciona',
         'nav.build': 'Crarr',
         'nav.news': 'Actualizaciones',
+        'nav.home': 'Casa',
         'nav.install': 'Instalar',
         'nav.start': 'Comenzar a crear',
 
